@@ -7,7 +7,7 @@ IoT 固件侦察工具（ANSI 颜色，深色终端）
  2. 常见敏感文件 (passwd, shadow, httpd.conf, .env)
  3. init.d 目录下的启动脚本
  4. 文件中“admin”和“root”关键字出现情况，排除静态文件 (.js, .shtml, .html, .xml)
- 5. 所有包含“httpd”字样的服务文件（minihttpd、uhttpd 等）
+ 5. 所有包含“httpd”字样的服务文件（minihttpd、uhttpd 等），以及引用 cgiMain、httpd_init、websFormDefine 的文件
 
 特性：
  - 限制输出行的最大宽度以提高可读性
@@ -40,7 +40,7 @@ COLORS = {
 DEFAULT_KEYWORDS =  [
     'admin', 'root','passwd',         
     'sshd', 'telnetd','ftpd','udhcpd','miniupnpd',
-    'smbd','smbd'    
+    'smbd','smbd',
 ]
 
 # 输出每行的最大字符数
@@ -110,18 +110,36 @@ def find_init_scripts(root):
 
 
 def find_httpd_services(root):
-    """查找所有包含“httpd”字样且具有执行权限的文件，检测是否为二进制，仅输出二进制，排除脚本自身。"""
-    services = []
+    """查找所有包含“httpd”字样且具有执行权限的文件，以及包含指定 Web 服务函数引用的文件，去重后返回。"""
+    services = set()
+    # 按文件名查找 httpd 二进制
     for path in Path(root).rglob('*'):
-        if (not path.is_file() or path.name == SCRIPT_NAME or
-            'httpd' not in path.name.lower()):
+        if (not path.is_file() or path.name == SCRIPT_NAME):
             continue
+        name_lower = path.name.lower()
         try:
-            if path.stat().st_mode & 0o111 and is_binary_file(path):
-                services.append(str(path))
+            if 'httpd' in name_lower and (path.stat().st_mode & 0o111) and is_binary_file(path):
+                services.add(str(path))
         except Exception:
             continue
-    return services
+    # 扫描文件内容，查找特定函数引用
+    keywords = ['cgiMain', 'httpd_init', 'websFormDefine']
+    for path in Path(root).rglob('*'):
+        if not path.is_file() or path.name == SCRIPT_NAME:
+            continue
+        try:
+            with path.open(errors='ignore') as f:
+                content = f.read()
+            for k in keywords:
+                if k in content:
+                    services.add(str(path))
+                    break
+        except Exception:
+            continue
+    # 返回去重列表
+    return list(services)
+
+
 def detect_user_keywords(root, keywords=None):
     """检测指定关键词在非静态文件中的出现，并高亮匹配片段，排除硬编码列表中的可执行文件与静态资源。"""
     if keywords is None:
@@ -169,8 +187,6 @@ def detect_user_keywords(root, keywords=None):
             continue
 
     return hits
-
-
 
 
 def print_header(title):
