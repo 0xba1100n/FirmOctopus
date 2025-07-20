@@ -38,7 +38,7 @@ COLORS = {
 
 # 默认关键词列表
 DEFAULT_KEYWORDS =  [
-    'admin', 'root','passwd',         
+    'admin', 'root:','passwd',         
     'sshd', 'telnetd','ftpd','udhcpd','miniupnpd',
     'smbd','smbd',
 ]
