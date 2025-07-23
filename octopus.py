@@ -10,13 +10,14 @@ IoT 固件侦察工具（ANSI 颜色，深色终端）
  5. 所有包含“httpd”字样的服务文件（minihttpd、uhttpd 等），以及引用 cgiMain、httpd_init、websFormDefine 的文件
  6. 自定义侦查：基于用户定义的字典（键为标签，值为 (模式, 模式类型)），按模式（0: grep 内容，1: 文件名匹配）判断固件结构类型，并在末尾输出汇总
  7. 如果检测到 Goahead，则在所有输出结束后，执行 strings usr/lib/libWebs.so 提取 Goahead 版本号并显示
+   如果检测到 nginx，则执行 grep -ril "location /" <root>，并输出存在 location / 的文件列表
 
 特性：
  - 限制输出行的最大宽度以提高可读性
  - 使用 ANSI 转义码输出彩色，无需第三方库
  - 为深色终端优化的明亮配色
  - 在 "用户关键词" 小节展示关键词列表
- - 在最后输出自定义侦查汇总及 Goahead 版本号，不列出详细文件
+ - 在最后输出自定义侦查汇总、nginx 路由文件及 Goahead 版本号，不列出详细文件
  - 增加进度提示，提升用户等待体验
 
 用法：
@@ -297,7 +298,16 @@ def main():
     # 自定义侦察汇总输出
     if custom_hits:
         summary = '+'.join(custom_hits)
-        print(f"{COLORS['green']}该固件是{summary}结构的文件{RESET}\n")
+        print(f"{COLORS['green']}该固件是{summary}结构的文件{RESET}")
+        # nginx 路由检测
+        if 'nginx' in custom_hits:
+            try:
+                res = subprocess.run(['grep', '-ril', 'location /', str(root)], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                files = [f for f in res.stdout.decode(errors='ignore').splitlines() if f]
+            except Exception:
+                files = []
+            if files:
+                print(f"{COLORS['green']}[+] 存在nginx路由文件: {', '.join(files)}{RESET}\n")
 
     # 最后输出 Goahead 版号
     if goahead_version:
