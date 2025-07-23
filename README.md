@@ -38,8 +38,10 @@ python octopus.py [文件系统路径]
 
 
 
-## 功能7：直接发现版本号（待完善）
-目前支持goahead
+## 功能7：待完善的，针对每种固件的进一步信息发现
+目前支持发现goahead版本号（不一定有好像）
 ![](https://balloonblogsrcs.oss-cn-shanghai.aliyuncs.com/20250723124557.png)
 
+nginx的路由文件
+![](https://balloonblogsrcs.oss-cn-shanghai.aliyuncs.com/20250723125907.png)
 # 补充
