@@ -1,3 +1,4 @@
+中文版介绍：https://github.com/0xba1100n/FirmOctopus/blob/main/README.md
 # Introduction
 
 FirmOctopus is a personal one-click firmware information collection script that will continue to be updated.
