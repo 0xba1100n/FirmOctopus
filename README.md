@@ -11,6 +11,8 @@ FirmOctoupus(固件章鱼)是一个目前自用的一键固件信息收集脚本
 
 + HTTPD服务类别判定（PHP、Goahead、Lua、Asp、NGINX、Boa...）
 
++ 版本号识别（部分httpd服务类别）
+
 + 敏感文件发现
 
 + 随时可以扩充以上的关键字来进行二开
