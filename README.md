@@ -1,3 +1,4 @@
+English version readme:  [](https://github.com/0xba1100n/FirmOctopus/blob/main/Readme_EN.md)
 # 简介
 FirmOctoupus(固件章鱼)是一个目前自用的一键固件信息收集脚本，会继续持续更新
 
