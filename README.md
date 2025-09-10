@@ -2,8 +2,6 @@ English version readme:  https://github.com/0xba1100n/FirmOctopus/blob/main/Read
 # 简介
 FirmOctoupus(固件章鱼)是一个目前自用的一键固件信息收集脚本，会继续持续更新
 
-![83b48fe032f2f2455766c2ada694860](https://balloonblogsrcs.oss-cn-shanghai.aliyuncs.com/83b48fe032f2f2455766c2ada694860.jpg)
-
 目前实现了只要一键就可以：
 
 + 启动脚本发现
