@@ -3,8 +3,6 @@
 
 FirmOctopus is a personal one-click firmware information collection script that will continue to be updated.
 
-![83b48fe032f2f2455766c2ada694860](https://balloonblogsrcs.oss-cn-shanghai.aliyuncs.com/83b48fe032f2f2455766c2ada694860.jpg)
-
 Currently, it implements a one-click solution to:
 
 + Discover startup scripts
